@@ -1,4 +1,5 @@
 #include "setup.h"
+#include "sensor.h"
 
 ADC_MODE(ADC_VCC);
 
@@ -7,6 +8,7 @@ void setup() {
   pinMode(0, OUTPUT);
   
   setupWifi();
+  setupSensor();
 }
 
 void loop() {
@@ -15,12 +17,14 @@ void loop() {
 
   float batteryLevel = ESP.getVcc();
   char url[64];
+  Adafruit_BME680 bme = getBME();
+  bme.performReading();
 
-  sprintf(url, "/batterytest?level=%f", batteryLevel / 1024);
+  sprintf(url, "/post?test=%f", bme.temperature);
   Serial.print("Requesting URL: ");
   Serial.println(url);
   
-  makeRequest(url, "GET");
+  makeRequest(url, "POST");
   
   Serial.println();
   Serial.println("closing connection");

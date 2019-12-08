@@ -5,8 +5,8 @@
 #include <WiFiClientSecure.h>
 
 void setupWifi() {
-  const String ssid     = "";
-  const String password = "";
+  const String ssid     = "Funbox";
+  const String password = "ilikebigbutts";
 
   WiFi.begin(ssid, password);
   
@@ -17,7 +17,7 @@ void setupWifi() {
 
 void makeRequest(String url, String method) {
   WiFiClient client;
-  const String host = "";
+  const String host = "alexraileanu.dev";
   const int httpPort = 443;
   
   Serial.print("connecting to ");
@@ -30,5 +30,7 @@ void makeRequest(String url, String method) {
 
   client.print(String(method + " ") + url + " HTTP/1.1\r\n" +
                "Host: " + host + "\r\n" + 
-               "Connection: close\r\n\r\n");
+               "Content-Type: application/json" + "\r\n" + 
+               "Content-Length: 100" + "\r\n\r\n" + 
+               "\"temperature\": \"20.300\",\"pressure\": \"1011.43\",\"humidity\": \"51.97\",\"gas\": \"34.27\",\"battery\": \"3400\"");
 }
