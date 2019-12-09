@@ -1,0 +1,13 @@
+[Unit]
+Description=uWSGI for the collector service
+After=network.target
+
+[Service]
+User=pi
+Group=pi
+WorkingDirectory=/home/pi/weather-station/collector
+Environment="PATH=/home/pi/weather-station/collector/venv/bin"
+ExecStart=/home/pi/weather-station/collector/venv/bin/uwsgi --wsgi-disable-file-wrapper --ini /home/pi/weather-station/collector/resources/collector.ini
+
+[Install]
+WantedBy=multi-user.target

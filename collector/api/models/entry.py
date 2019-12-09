@@ -1,0 +1,27 @@
+from api import db
+from sqlalchemy.exc import SQLAlchemyError
+
+
+class Entry(db.Model):
+    id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
+    temp = db.Column(db.Float(precision=2))
+    pressure = db.Column(db.Float(precision=2))
+    humidity = db.Column(db.Float(precision=2))
+    gas = db.Column(db.Float(precision=2))
+    battery = db.Column(db.Float(precision=2))
+    time = db.Column(db.Integer())
+
+    def __init__(self, temp: str, pressure: str, humidity: str, gas: str, battery: str, time: int) -> None:
+        self.temp = temp
+        self.pressure = pressure
+        self.humidity = humidity
+        self.gas = gas
+        self.battery = battery
+        self.time = time
+
+    def save(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except SQLAlchemyError:
+            pass

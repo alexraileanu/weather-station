@@ -1,3 +1,7 @@
 .vscode
 build
-api/venv
+collector/venv
+collector/config/config.cfg
+.idea
+__pycache__
+*.pyc
