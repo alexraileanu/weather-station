@@ -7,7 +7,7 @@ from api.models.entry import Entry
 
 
 @app.route('/collect', methods=['POST'])
-def collect() -> str:
+def collect():
     request_body = request.json
     Entry(
         temp=request_body['temperature'],

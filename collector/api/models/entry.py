@@ -11,7 +11,7 @@ class Entry(db.Model):
     battery = db.Column(db.Float(precision=2))
     time = db.Column(db.Integer())
 
-    def __init__(self, temp: str, pressure: str, humidity: str, gas: str, battery: str, time: int) -> None:
+    def __init__(self, temp, pressure, humidity, gas, battery, time):
         self.temp = temp
         self.pressure = pressure
         self.humidity = humidity
