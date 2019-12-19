@@ -3,30 +3,34 @@
 
 ADC_MODE(ADC_VCC);
 
+
+#define SEALEVELPRESSURE_HPA (1013.25)
 void setup() {
   Serial.begin(115200);
   pinMode(0, OUTPUT);
-  
+
   setupWifi();
   setupSensor();
 }
 
 void loop() {
   digitalWrite(0, HIGH);
-  delay(5000);
+
+  // wait half an hour before reading again
+  delay(1000 * 60 * 30);
 
   float batteryLevel = ESP.getVcc();
-  char url[64];
   Adafruit_BME680 bme = getBME();
   bme.performReading();
 
-  sprintf(url, "/post?test=%f", bme.temperature);
-  Serial.print("Requesting URL: ");
-  Serial.println(url);
-  
-  makeRequest(url, "POST");
-  
-  Serial.println();
-  Serial.println("closing connection");
+  String data[5] = {
+    String(bme.temperature),
+    String(bme.pressure / 100.0),
+    String(bme.humidity),
+    String(bme.gas_resistance / 1000.0),
+    String(batteryLevel),
+  };
+
+  makeRequest("/collect", "POST", data);
   digitalWrite(0, LOW);
 }

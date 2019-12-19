@@ -2,4 +2,4 @@
 
 void setupWifi();
 
-void makeRequest(String url, String method);
+void makeRequest(String url, String method, String data[5]);

@@ -10,8 +10,6 @@
 #define BME_MOSI 13
 #define BME_CS 15
 
-#define SEALEVELPRESSURE_HPA (1013.25)
-
 Adafruit_BME680 bme(BME_CS, BME_MOSI, BME_MISO,  BME_SCK);
 
 void setupSensor() {
@@ -27,32 +25,3 @@ void setupSensor() {
 Adafruit_BME680 getBME() {
   return bme;
 }
-
-// void loop() {
-//   if (! bme.performReading()) {
-//     Serial.println("Failed to perform reading :(");
-//     return;
-//   }
-//   Serial.print("Temperature = ");
-//   Serial.print(bme.temperature);
-//   Serial.println(" *C");
-
-//   Serial.print("Pressure = ");
-//   Serial.print(bme.pressure / 100.0);
-//   Serial.println(" hPa");
-
-//   Serial.print("Humidity = ");
-//   Serial.print(bme.humidity);
-//   Serial.println(" %");
-
-//   Serial.print("Gas = ");
-//   Serial.print(bme.gas_resistance / 1000.0);
-//   Serial.println(" KOhms");
-
-//   Serial.print("Approx. Altitude = ");
-//   Serial.print(bme.readAltitude(SEALEVELPRESSURE_HPA));
-//   Serial.println(" m");
-
-//   Serial.println();
-//   delay(2000);
-// }
