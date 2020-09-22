@@ -1,5 +1,7 @@
 ### weather-station
 
+#### description
+
 small repo which contains the code that runs on the board (the cpp code) and the code for the api (flask+sqlalchemy).
 
 the setup is fairly simple:
@@ -11,7 +13,13 @@ from there on, the idea is to set up alerts for when the batteries are low (whic
 it's not particularly easy to get the battery level via the jst connector) or making graphs based on the data. the 
 possibilities are endless!
 
-connections are like the following: 
+#### components used:
+
+- [adafruit feather huzzah with ESP8266 wifi headers](https://www.kiwi-electronics.nl/adafruit/adafruit-development-boards/assembled-adafruit-feather-huzzah-with-esp8266-wifi-with-headers)
+- [BME680 temperature/humidity/pressure/gas sensor](https://www.antratek.nl/bme680-temperature-humidity-pressure-and-gas-sensor)
+- [battery holder with jst connector](https://www.kiwi-electronics.nl/componenten-onderdelen/batterijhouders/3x-aaa-battery-holder-with-jst)
+
+#### connections: 
 
 - Connect Vin to the power supply, 3V or 5V is fine. Use the same voltage that the microcontroller logic is based off of
 - Connect GND to common power/data ground
@@ -29,7 +37,7 @@ the pins must match the BME_* constants in sensor.cpp:
 #define BME_CS 15 
 ```
 
-todo:
+#### todo:
 
 - [ ] solder the connections
 - [ ] find a way to reliably read battery levels
