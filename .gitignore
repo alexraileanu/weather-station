@@ -1,4 +1,3 @@
-.vscode
 build
 collector/venv
 collector/config/config.cfg
