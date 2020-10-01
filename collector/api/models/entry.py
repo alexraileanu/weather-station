@@ -1,5 +1,6 @@
 from api import db
 from sqlalchemy.exc import SQLAlchemyError
+from api.utl.mail import Mailer
 
 
 class Entry(db.Model):
@@ -18,6 +19,9 @@ class Entry(db.Model):
         self.gas = gas
         self.battery = battery
         self.time = time
+
+        if battery < 3100:
+            Mailer(battery).send()
 
     def save(self):
         try:
