@@ -6,6 +6,7 @@ void setupWifi() {
   const String ssid     = "";
   const String password = "";
 
+  WiFi.forceSleepWake();
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {

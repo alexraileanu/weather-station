@@ -3,8 +3,8 @@
         {
             "name": "Linux",
             "includePath": [
-                "${HOME}/.arduino15/packages/esp8266/tools/**",
-                "${HOME}/.arduino15/packages/esp8266/hardware/esp8266/2.7.4/**",
+                "${env:HOME}/.arduino15/packages/esp8266/tools/**",
+                "${env:HOME}/.arduino15/packages/esp8266/hardware/esp8266/2.7.4/**",
                 "${workspaceFolder}/**"
             ],
             "defines": [],

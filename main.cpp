@@ -2,23 +2,23 @@
 #include "sensor.h"
 
 ADC_MODE(ADC_VCC);
-
-
 #define SEALEVELPRESSURE_HPA (1013.25)
+#define SLEEP_TIME 1800000000
+
+void preinit() {
+  ESP8266WiFiClass::preinitWiFiOff();
+}
+
 void setup() {
   Serial.begin(115200);
   pinMode(0, OUTPUT);
 
-  setupWifi();
   setupSensor();
 }
 
 void loop() {
-  digitalWrite(0, HIGH);
-
-  // wait half an hour before reading again
-  delay(1000 * 60 * 30);
-
+  setupWifi();
+  
   float batteryLevel = ESP.getVcc();
   Adafruit_BME680 bme = getBME();
   bme.performReading();
@@ -32,5 +32,6 @@ void loop() {
   };
 
   makeRequest("/collect", "POST", data);
-  digitalWrite(0, LOW);
+
+  ESP.deepSleep(SLEEP_TIME);
 }
