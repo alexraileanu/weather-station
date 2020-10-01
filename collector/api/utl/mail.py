@@ -6,11 +6,11 @@ from api import app
 
 class Mailer:
     battery_val: int
-    sg: SendGridAPIClient
+    client: SendGridAPIClient
 
     def __init__(self, battery_val: int):
         self.battery_val = battery_val
-        self.sg = SendGridAPIClient(api_key=app.config['SENDGRID_API_KEY'])
+        self.client = SendGridAPIClient(api_key=app.config['SENDGRID_API_KEY']).client.mail
 
     def send(self):
         from_email: Email = Email(app.config['FROM_EMAIL'])
@@ -20,7 +20,7 @@ class Mailer:
 
         mail: Mail = Mail(from_email, to_email, subject, content)
         try:
-            self.sg.client.mail.send.post(request_body=mail.get())
+            self.client.send.post(request_body=mail.get())
         except:
             # if the email failed to send somehow, ignore it silently.
             pass

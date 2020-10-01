@@ -24,11 +24,12 @@ class Entry(db.Model, BaseModel):
         self.time = time
 
         if battery < 3100:
-            mailer = Mailer(battery)
-
             yesterday = arrow.now().shift(days=-1).timestamp
 
             should_mail = DBMail.query.filter(DBMail.sent_at > yesterday).first() is None
             if should_mail:
+                mailer = Mailer(battery)
+
                 DBMail(int(arrow.now().timestamp)).save()
+
                 mailer.send()
