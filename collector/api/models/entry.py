@@ -1,9 +1,9 @@
 from api import db
-from sqlalchemy.exc import SQLAlchemyError
+from api.models.base import BaseModel
 from api.utl.mail import Mailer
 
 
-class Entry(db.Model):
+class Entry(db.Model, BaseModel):
     id = db.Column(db.Integer(), primary_key=True, autoincrement=True)
     temp = db.Column(db.Float(precision=2))
     pressure = db.Column(db.Float(precision=2))
@@ -22,10 +22,3 @@ class Entry(db.Model):
 
         if battery < 3100:
             Mailer(battery).send()
-
-    def save(self):
-        try:
-            db.session.add(self)
-            db.session.commit()
-        except SQLAlchemyError:
-            pass
