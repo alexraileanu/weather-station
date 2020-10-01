@@ -1,5 +1,5 @@
 {
-    "arduino.path": "${HOME}/.arduino",
+    "arduino.path": "${env:HOME}/.arduino",
     "arduino.commandPath": "arduino",
     "arduino.logLevel": "info",
     "arduino.enableUSBDetection": true,
