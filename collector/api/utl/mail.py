@@ -2,7 +2,6 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Content, Email, Mail, To
 
 from api import app
-from api.models.mail import DBMail
 
 
 class Mailer:
@@ -12,7 +11,6 @@ class Mailer:
     def __init__(self, battery_val: int):
         self.battery_val = battery_val
         self.sg = SendGridAPIClient(api_key=app.config['SENDGRID_API_KEY'])
-
 
     def send(self):
         from_email: Email = Email(app.config['FROM_EMAIL'])
