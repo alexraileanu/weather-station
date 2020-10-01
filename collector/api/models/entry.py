@@ -1,5 +1,8 @@
+import arrow
+
 from api import db
 from api.models.base import BaseModel
+from api.models.mail import DBMail
 from api.utl.mail import Mailer
 
 
@@ -21,4 +24,11 @@ class Entry(db.Model, BaseModel):
         self.time = time
 
         if battery < 3100:
-            Mailer(battery).send()
+            mailer = Mailer(battery)
+
+            yesterday = arrow.now().shift(days=-1).timestamp
+
+            should_mail = DBMail.query.filter(DBMail.sent_at > yesterday).first() is None
+            if should_mail:
+                DBMail(int(arrow.now().timestamp)).save()
+                mailer.send()
