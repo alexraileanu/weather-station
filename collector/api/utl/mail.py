@@ -2,6 +2,7 @@ from sendgrid import SendGridAPIClient
 from sendgrid.helpers.mail import Content, Email, Mail, To
 
 from api import app
+from api.models.mail import DBMail
 
 
 class Mailer:
@@ -12,6 +13,7 @@ class Mailer:
         self.battery_val = battery_val
         self.sg = SendGridAPIClient(api_key=app.config['SENDGRID_API_KEY'])
 
+
     def send(self):
         from_email: Email = Email(app.config['FROM_EMAIL'])
         to_email: To = To(app.config['TO_EMAIL'])
@@ -19,7 +21,8 @@ class Mailer:
         content: Content = Content('text/plain', f'Battery level currently at {self.battery_val}')
 
         mail: Mail = Mail(from_email, to_email, subject, content)
-        r = self.sg.client.mail.send.post(request_body=mail.get())
-        print(r.status_code)
-        print(r.body)
-        print(r.headers)
+        try:
+            self.sg.client.mail.send.post(request_body=mail.get())
+        except:
+            # if the email failed to send somehow, ignore it silently.
+            pass
