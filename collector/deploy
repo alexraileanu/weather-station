@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+
+TARGET=$1
+
+RED='\033[0;31m'
+YELLOW='\033[0;33m'
+GREEN='\033[0;32m'
+
+NC='\033[0m'
+
+ts() {
+ date "+%Y-%m-%d %H:%M:%S"
+}
+
+if [ -z "$TARGET" ]
+then
+  printf "${RED}Target argument can not be empty${NC}"
+  echo -e "\nUsage:\n./deploy [target]"
+
+  exit 1
+fi
+
+printf "[$(ts)] ${YELLOW}Deploy started${NC}\n"
+
+printf "[$(ts)] ${YELLOW}Syncing files${NC}\n"
+
+rsync -ai --relative --exclude 'venv/' --exclude '*.pyc' --exclude '*__pycache__*' . $TARGET:weather-station/ | sed 's/^/\t/'
+
+printf "[$(ts)] ${GREEN}File sync completed successfully${NC}\n"
+
+printf "[$(ts)] ${YELLOW}Restarting service${NC}\n"
+
+if ssh $TARGET -t "sudo ./weather-station/restart" > /dev/null 2>&1 ; then
+  printf "[$(ts)] ${GREEN}Service restarted correctly${NC}\n"
+  printf "[$(ts)] ${GREEN}Deploy finished correctly${NC}\n"
+else
+  printf "[$(ts)] ${RED}Failed restarting service${NC}\n"
+fi
