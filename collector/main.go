@@ -4,6 +4,7 @@ import (
     "os"
 
     "github.com/alexraileanu/weather-station/http"
+    "github.com/alexraileanu/weather-station/cmd"
 
     "github.com/joho/godotenv"
     "github.com/spf13/cobra"
@@ -30,9 +31,19 @@ func main() {
             initEnv(s.Init, env)
         },
     }
+    var migrateCmd = &cobra.Command{
+        Use:   "migrate",
+        Short: "Runs all the migrations",
+        Run: func(c *cobra.Command, args []string) {
+            initEnv(cmd.RunMigrations, env)
+        },
+    }
 
     apiCmd.Flags().StringVarP(&env, "e", "e", "", "Env file")
+    migrateCmd.Flags().StringVarP(&env, "e", "e", "", "Env file")
+
     rootCmd.AddCommand(apiCmd)
+    rootCmd.AddCommand(migrateCmd)
 
     rootCmd.Execute()
 }
