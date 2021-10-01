@@ -8,4 +8,5 @@ func RunMigrations(usr, pass, host, name string) {
     m := migrations.Initialize(usr, pass, host, name)
 
     m.AddMigrationsTable()
+    m.AddEntriesTable()
 }
