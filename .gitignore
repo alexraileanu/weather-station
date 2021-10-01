@@ -1,8 +1,6 @@
 build
-collector/venv
-collector/config/config.cfg
 .idea
-__pycache__
-*.pyc
+_data
 
-weather-station
+collector/weather
+collector/configs/.env
