@@ -4,3 +4,5 @@ collector/config/config.cfg
 .idea
 __pycache__
 *.pyc
+
+weather-station
