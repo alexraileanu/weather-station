@@ -14,6 +14,7 @@ import (
     "gorm.io/gorm"
 
     "github.com/alexraileanu/weather-station/utl/db"
+    "github.com/alexraileanu/weather-station/pkg/entry"
 )
 
 type SRV struct {
@@ -79,6 +80,8 @@ func (s *SRV) setup() {
             param.Path,
         )
     }))
+
+    entry.NewHTTP(entry.Initialize(s.db), eng.Group("entry"))
 
     s.Eng = eng
 }
