@@ -3,6 +3,7 @@ package http
 import (
     "context"
     "fmt"
+    "github.com/alexraileanu/weather-station/utl/mail"
     "log"
     "net/http"
     "os"
@@ -81,7 +82,7 @@ func (s *SRV) setup() {
         )
     }))
 
-    entry.NewHTTP(entry.Initialize(s.db), eng.Group("entry"))
+    entry.NewHTTP(entry.Initialize(s.db, mail.New()), eng.Group("entry"))
 
     s.Eng = eng
 }

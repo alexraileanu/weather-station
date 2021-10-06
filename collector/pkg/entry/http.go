@@ -33,6 +33,11 @@ func (h HTTP) createEntry(c *gin.Context) {
         return
     }
 
+    battery := math.ToFixed(r.Battery, 2)
+    if battery < 20 {
+        go h.svc.SendBatteryMail(battery)
+    }
+
     entry := &model.Entry{
         Temp: math.ToFixed(r.Temp, 2),
         Pressure: math.ToFixed(r.Pressure, 2),
