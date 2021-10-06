@@ -3,8 +3,8 @@ package main
 import (
     "os"
 
-    "github.com/alexraileanu/weather-station/http"
     "github.com/alexraileanu/weather-station/cmd"
+    "github.com/alexraileanu/weather-station/http"
 
     "github.com/joho/godotenv"
     "github.com/spf13/cobra"

@@ -14,8 +14,8 @@ import (
     "github.com/gin-gonic/gin"
     "gorm.io/gorm"
 
-    "github.com/alexraileanu/weather-station/utl/db"
     "github.com/alexraileanu/weather-station/pkg/entry"
+    "github.com/alexraileanu/weather-station/utl/db"
 )
 
 type SRV struct {
