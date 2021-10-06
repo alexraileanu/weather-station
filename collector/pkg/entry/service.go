@@ -21,15 +21,15 @@ type Mail interface {
 }
 
 type Entry struct {
-    db  *gorm.DB
-    edb EntryDB
+    db   *gorm.DB
+    edb  EntryDB
     mail Mail
 }
 
 func New(db *gorm.DB, edb EntryDB, mail Mail) Entry {
     return Entry{
-        db:  db,
-        edb: edb,
+        db:   db,
+        edb:  edb,
         mail: mail,
     }
 }
