@@ -1,8 +1,9 @@
 package entry
 
 import (
-    "net/http"
+    "github.com/alexraileanu/weather-station/utl/math"
     "github.com/gin-gonic/gin"
+    "net/http"
 
     "github.com/alexraileanu/weather-station/pkg/common/model"
 )
@@ -12,11 +13,11 @@ type HTTP struct {
 }
 
 type insert struct {
-    Temp       float32 `json:"temp" binding:"required"`
-    Pressure   float32 `json:"pressure" binding:"required"`
-    Humidity   float32 `json:"humidity" binding:"required"`
-    Gas        float32 `json:"gas" binding:"required"`
-    Battery    float32 `json:"battery" binding:"required"`
+    Temp       float64 `json:"temp" binding:"required"`
+    Pressure   float64 `json:"pressure" binding:"required"`
+    Humidity   float64 `json:"humidity" binding:"required"`
+    Gas        float64 `json:"gas" binding:"required"`
+    Battery    float64 `json:"battery" binding:"required"`
 }
 
 func NewHTTP(svc Service, c *gin.RouterGroup) {
@@ -33,11 +34,11 @@ func (h HTTP) createEntry(c *gin.Context) {
     }
 
     entry := &model.Entry{
-        Temp: r.Temp,
-        Pressure: r.Pressure,
-        Humidity: r.Humidity,
-        Gas: r.Gas,
-        Battery: r.Battery,
+        Temp: math.ToFixed(r.Temp, 2),
+        Pressure: math.ToFixed(r.Pressure, 2),
+        Humidity: math.ToFixed(r.Humidity, 2),
+        Gas: math.ToFixed(r.Gas, 2),
+        Battery: math.ToFixed(r.Battery, 2),
     }
 
     h.svc.SaveEntry(entry, true)
