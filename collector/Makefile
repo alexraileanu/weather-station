@@ -9,3 +9,9 @@ migrate: dev-build
 
 watch:
 		air -c .air.toml
+
+release:
+		GOOS=linux GOARCH=arm64 go build -ldflags="-s -w" -tags prod -o weather . && upx -9 weather
+
+deploy: release
+		./deploy

@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+#ssh pi -t "systemctl stop weather"
+scp weather pi:/opt/weather/weather
+#ssh pi -t "systemctl start weather"

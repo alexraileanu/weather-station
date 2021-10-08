@@ -51,3 +51,5 @@ func (h HTTP) createEntry(c *gin.Context) {
     c.JSON(http.StatusOK, gin.H{})
     return
 }
+
+
