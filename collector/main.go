@@ -22,7 +22,7 @@ func initEnv(toRun func(usr, pass, host, db string), env string) {
 func main() {
     var env string
 
-    var rootCmd = &cobra.Command{Use: "serveradmin"}
+    var rootCmd = &cobra.Command{Use: "weather"}
     var apiCmd = &cobra.Command{
         Use:   "api",
         Short: "Runs the backend API",
