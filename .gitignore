@@ -4,3 +4,5 @@ _data
 
 collector/weather
 collector/configs/.env
+
+sensor/cmake-build-debug
