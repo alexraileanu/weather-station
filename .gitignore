@@ -6,3 +6,4 @@ collector/weather
 collector/configs/.env
 
 sensor/cmake-build-debug
+sensor/sdkconfig*
