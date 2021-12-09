@@ -7,7 +7,7 @@
 #define WIFI_CONNECT_BIT BIT(0)
 #define WIFI_FAIL_BIT BIT(1)
 
-static const char *TAG = "sensor";
+static const char *TAG = "weather_wifi";
 static int retry_num = 0;
 static EventGroupHandle_t wifi_evt_group;
 
@@ -26,7 +26,6 @@ static void evt_handler(void *arg, esp_event_base_t evt_base, int32_t evt_id, vo
         }
     } else if (evt_base == IP_EVENT && evt_id == IP_EVENT_STA_GOT_IP) {
         ip_event_got_ip_t *evt = (ip_event_got_ip_t *) evt_data;
-        ESP_LOGI(TAG, "got ip:" IPSTR, IP2STR(&evt->ip_info.ip));
         retry_num = 0;
         xEventGroupSetBits(*connect_event_group, WIFI_CONNECT_BIT);
     }
@@ -61,8 +60,6 @@ void wifi_init(EventGroupHandle_t* connect_event_group) {
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
     ESP_ERROR_CHECK(esp_wifi_set_config(WIFI_IF_STA, &wifi_config));
     ESP_ERROR_CHECK(esp_wifi_start());
-
-    ESP_LOGI(TAG, "init_wifi finished");
 
     EventBits_t bits = xEventGroupWaitBits(*connect_event_group, WIFI_CONNECT_BIT | WIFI_FAIL_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
 
