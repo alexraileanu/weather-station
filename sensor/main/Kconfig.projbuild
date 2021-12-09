@@ -1,4 +1,4 @@
-menu "WIFI Config"
+menu "Weather Station Config"
     config ESP_WIFI_SSID
         string "WiFi SSID"
         help
@@ -18,7 +18,8 @@ menu "WIFI Config"
     config MQTT_BROKER_HOST
         string "MQTT Host"
     config MQTT_BROKER_PORT
-        string "MQTT Port"
+        int "MQTT Port"
+        default 0
     config MQTT_BROKER_USER
         string "MQTT User"
     config MQTT_BROKER_PASSWD

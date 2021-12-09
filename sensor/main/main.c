@@ -1,9 +1,16 @@
 #include "nvs_flash.h"
+#include "esp_log.h"
 
 #include "weather.h"
 #include "sensor.h"
 #include "wifi.h"
 #include "queue.h"
+
+static const char *TAG = "weather";
+
+void create_weather_message(char *msg, struct Weather *weather) {
+    sprintf(msg, "{\"temperature\": %.2f, \"pressure\": %.2f, \"humidity\": %.2f}", weather->temperature, weather->pressure, weather->humidity);
+}
 
 void app_main(void) {
     esp_err_t ret = nvs_flash_init();
@@ -25,6 +32,10 @@ void app_main(void) {
 
     EventGroupHandle_t connect_evt_group = xEventGroupCreate();
     QueueHandle_t queue = xQueueCreate(2, sizeof(struct Weather));
+    if (queue == 0) {
+        ESP_LOGE(TAG, "Error creating queue");
+        return;
+    }
 
     xTaskCreatePinnedToCore(sensor_collect_data, "sensor_collect_data", configMINIMAL_STACK_SIZE * 8, (void *)queue, 5, NULL, APP_CPU_NUM);
 
