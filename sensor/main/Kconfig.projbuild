@@ -14,4 +14,13 @@ menu "WIFI Config"
         default 5
         help
             Set the Maximum retry to avoid station reconnecting to the AP unlimited when the AP is really inexistent.
+
+    config MQTT_BROKER_HOST
+        string "MQTT Host"
+    config MQTT_BROKER_PORT
+        string "MQTT Port"
+    config MQTT_BROKER_USER
+        string "MQTT User"
+    config MQTT_BROKER_PASSWD
+        string "MQTT Password"
 endmenu
