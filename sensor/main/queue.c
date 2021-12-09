@@ -14,6 +14,11 @@ static void send_weather_data(esp_mqtt_client_handle_t *client, QueueHandle_t qu
             ESP_LOGI(TAG, "Attempting to send json: %s", json_msg);
             msg_id = esp_mqtt_client_publish(*client, MQTT_TOPIC, json_msg, 0, 1, 0);
             ESP_LOGI(TAG, "Sent JSON: %s to id: %d", json_msg, msg_id);
+
+            const float SLEEP_TIME = 1.44 * 1e10;
+            ESP_LOGI(TAG, "Going to deep sleep for %.1f", SLEEP_TIME / 1e6);
+            ESP_ERROR_CHECK(esp_wifi_stop());
+            esp_deep_sleep(SLEEP_TIME);
         }
     }
 }
