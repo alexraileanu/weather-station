@@ -1,46 +1,52 @@
 package main
 
 import (
+    "github.com/alexraileanu/weather-station/queue"
+    "github.com/joho/godotenv"
     "os"
 
     "github.com/alexraileanu/weather-station/cmd"
     "github.com/alexraileanu/weather-station/http"
 
-    "github.com/joho/godotenv"
     "github.com/spf13/cobra"
 )
 
-func initEnv(toRun func(usr, pass, host, db string), env string) {
-    err := godotenv.Load(env)
-    if err != nil {
-        panic(err)
-    }
-
+func initDbEnv(toRun func(usr, pass, host, db string)) {
     toRun(os.Getenv("DB_USER"), os.Getenv("DB_PASS"), os.Getenv("DB_HOST"), os.Getenv("DB_NAME"))
 }
 
+var envFile string
+
 func main() {
-    var env string
+    cobra.OnInitialize(func() {
+        err := godotenv.Load(envFile)
+        if err != nil {
+            panic(err)
+        }
+    })
 
     var rootCmd = &cobra.Command{Use: "weather"}
     var apiCmd = &cobra.Command{
         Use:   "api",
-        Short: "Runs the backend API",
+        Short: "Runs the backend",
         Run: func(cmd *cobra.Command, args []string) {
             s := http.SRV{}
-            initEnv(s.Init, env)
+            go initDbEnv(s.Init)
+
+            q := queue.Queue{}
+            q.Init()
         },
     }
     var migrateCmd = &cobra.Command{
         Use:   "migrate",
         Short: "Runs all the migrations",
         Run: func(c *cobra.Command, args []string) {
-            initEnv(cmd.RunMigrations, env)
+            initDbEnv(cmd.RunMigrations)
         },
     }
 
-    apiCmd.Flags().StringVarP(&env, "e", "e", "", "Env file")
-    migrateCmd.Flags().StringVarP(&env, "e", "e", "", "Env file")
+    apiCmd.Flags().StringVarP(&envFile, "e", "e", "", "Env file")
+    migrateCmd.Flags().StringVarP(&envFile, "e", "e", "", "Env file")
 
     rootCmd.AddCommand(apiCmd)
     rootCmd.AddCommand(migrateCmd)
