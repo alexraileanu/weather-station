@@ -7,26 +7,14 @@
 #define WIFI_CONNECT_BIT BIT(0)
 #define WIFI_FAIL_BIT BIT(1)
 
-static const char *TAG = "weather_wifi";
-static int retry_num = 0;
-static EventGroupHandle_t wifi_evt_group;
-
 static void evt_handler(void *arg, esp_event_base_t evt_base, int32_t evt_id, void *evt_data) {
     EventGroupHandle_t* connect_event_group = (EventGroupHandle_t*) arg;
 
     if (evt_base == WIFI_EVENT && evt_id == WIFI_EVENT_STA_START) {
         esp_wifi_connect();
     } else if (evt_base == WIFI_EVENT && evt_id == WIFI_EVENT_STA_DISCONNECTED) {
-        if (retry_num < MAX_RETRY) {
-            esp_wifi_connect();
-            retry_num++;
-            ESP_LOGI(TAG, "Retrying WIFI connection");
-        } else {
-            xEventGroupSetBits(wifi_evt_group, WIFI_FAIL_BIT);
-        }
+        esp_wifi_connect();
     } else if (evt_base == IP_EVENT && evt_id == IP_EVENT_STA_GOT_IP) {
-        ip_event_got_ip_t *evt = (ip_event_got_ip_t *) evt_data;
-        retry_num = 0;
         xEventGroupSetBits(*connect_event_group, WIFI_CONNECT_BIT);
     }
 }

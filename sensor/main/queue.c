@@ -3,6 +3,7 @@
 static const char *TAG = "weather_queue";
 static const char *MQTT_TOPIC = "weather";
 static const char *MQTT_CLIENT_ID = "weather_station";
+static const int64_t WAKEUP_TIME_SEC = 3600;
 
 static void send_weather_data(esp_mqtt_client_handle_t *client, QueueHandle_t queue) {
     int msg_id;
@@ -15,10 +16,10 @@ static void send_weather_data(esp_mqtt_client_handle_t *client, QueueHandle_t qu
             msg_id = esp_mqtt_client_publish(*client, MQTT_TOPIC, json_msg, 0, 1, 0);
             ESP_LOGI(TAG, "Sent JSON: %s to id: %d", json_msg, msg_id);
 
-            const float SLEEP_TIME = 1.44 * 1e10;
-            ESP_LOGI(TAG, "Going to deep sleep for %.1f", SLEEP_TIME / 1e6);
+            ESP_LOGI(TAG, "Entering deep sleep for, 3600s\n");
             ESP_ERROR_CHECK(esp_wifi_stop());
-            esp_deep_sleep(SLEEP_TIME);
+            esp_sleep_enable_timer_wakeup(WAKEUP_TIME_SEC * 1000000);
+            esp_deep_sleep_start();
         }
     }
 }
