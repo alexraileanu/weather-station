@@ -34,29 +34,31 @@ void sensor_collect_data(void *pvParameters) {
     // Set ambient temperature to 10 degree Celsius
     bme680_set_ambient_temperature(&sensor, 20);
 
-    // as long as sensor configuration isn't changed, duration is constant
-    uint32_t duration;
-    bme680_get_measurement_duration(&sensor, &duration);
+    float totalValues[3];
 
-    bme680_values_float_t values;
+    for (int i = 0; i < 5; i++) {
+        bme680_values_float_t values;
+        uint32_t duration;
+        bme680_get_measurement_duration(&sensor, &duration);
 
-    if (bme680_force_measurement(&sensor) != ESP_OK) {
-        ESP_LOGI(TAG, "Error reading from sensor\n");
-        return;
+        if (bme680_force_measurement(&sensor) != ESP_OK) {
+            return;
+        }
+        vTaskDelay(duration);
+
+        if (bme680_get_results_float(&sensor, &values) == ESP_OK) {
+            totalValues[0] += values.temperature;
+            totalValues[1] += values.humidity;
+            totalValues[2] += values.pressure;
+        }
     }
-    vTaskDelay(duration);
 
-    if (bme680_get_results_float(&sensor, &values) != ESP_OK) {
-        ESP_LOGI(TAG, "error reading from sensor\n");
-    } else {
-        struct Weather post_msg;
-        post_msg.temperature = values.temperature;
-        post_msg.humidity = values.humidity;
-        post_msg.pressure = values.pressure;
-        ESP_LOGI(TAG, "Sending weather to queue: %f %f %f\n", post_msg.temperature, post_msg.humidity,post_msg.pressure);
+    struct Weather post_msg;
+    post_msg.temperature = totalValues[0] / 5;
+    post_msg.humidity = totalValues[1] / 5;
+    post_msg.pressure = totalValues[2] / 5;
 
-        xQueueSendToFront(queue, (void *)&post_msg, xQueueBlockTime);
-    }
+    xQueueSendToFront(queue, (void *) &post_msg, xQueueBlockTime);
 
     vTaskDelete(NULL);
 }
