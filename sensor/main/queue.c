@@ -6,13 +6,12 @@ static const char *MQTT_CLIENT_ID = "weather_station";
 static const int64_t WAKEUP_TIME_SEC = 1800;
 
 static void send_weather_data(esp_mqtt_client_handle_t *client, QueueHandle_t queue) {
-    int msg_id;
     if (queue != 0) {
         struct Weather weather;
         if (xQueueReceive(queue, &(weather), pdMS_TO_TICKS(1000))) {
             char json_msg[90];
             create_weather_message(json_msg, &weather);
-            msg_id = esp_mqtt_client_publish(*client, MQTT_TOPIC, json_msg, 0, 1, 0);
+            esp_mqtt_client_publish(*client, MQTT_TOPIC, json_msg, 0, 1, 0);
 
             ESP_LOGI(TAG, "Entering deep sleep for 30 minutes\n");
             ESP_ERROR_CHECK(esp_wifi_stop());
