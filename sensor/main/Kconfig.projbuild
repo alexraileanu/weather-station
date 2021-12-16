@@ -24,4 +24,9 @@ menu "Weather Station Config"
         string "MQTT User"
     config MQTT_BROKER_PASSWD
         string "MQTT Password"
+
+    config HTTP_LOG_HOST
+        string "Host for posting logs"
+    config HTTP_LOG_ENDPOINT
+        string "Endpoint for the logs"
 endmenu

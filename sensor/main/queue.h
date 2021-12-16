@@ -6,5 +6,6 @@
 
 #include "weather.h"
 #include "wifi.h"
+#include "http.h"
 
 void queue_start(QueueHandle_t queue);

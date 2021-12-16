@@ -9,6 +9,7 @@ static const char *TAG = "weather_sensor";
 const TickType_t xQueueBlockTime = pdMS_TO_TICKS(200);
 
 void sensor_collect_data(void *pvParameters) {
+    post_log("Preparing sensor reading");
     ESP_ERROR_CHECK(i2cdev_init());
     QueueHandle_t queue = (QueueHandle_t) pvParameters;
 
@@ -36,6 +37,7 @@ void sensor_collect_data(void *pvParameters) {
 
     float totalValues[3];
 
+    post_log("Preparing to read 5 values");
     for (int i = 0; i < 5; i++) {
         bme680_values_float_t values;
         uint32_t duration;
@@ -52,12 +54,14 @@ void sensor_collect_data(void *pvParameters) {
             totalValues[2] += values.pressure;
         }
     }
+    post_log("Read 5 values");
 
     struct Weather post_msg;
     post_msg.temperature = totalValues[0] / 5;
     post_msg.humidity = totalValues[1] / 5;
     post_msg.pressure = totalValues[2] / 5;
 
+    post_log("Sending data to queue");
     xQueueSendToFront(queue, (void *) &post_msg, xQueueBlockTime);
 
     vTaskDelete(NULL);

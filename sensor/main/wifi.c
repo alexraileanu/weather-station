@@ -52,7 +52,6 @@ void wifi_init(EventGroupHandle_t* connect_event_group) {
     EventBits_t bits = xEventGroupWaitBits(*connect_event_group, WIFI_CONNECT_BIT | WIFI_FAIL_BIT, pdFALSE, pdFALSE, portMAX_DELAY);
 
     if (bits != WIFI_CONNECT_BIT) {
-        // retry connection
         esp_wifi_connect();
     }
 }

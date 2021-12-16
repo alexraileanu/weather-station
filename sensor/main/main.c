@@ -5,6 +5,7 @@
 #include "sensor.h"
 #include "wifi.h"
 #include "queue.h"
+#include "http.h"
 
 static const char *TAG = "weather";
 
@@ -31,7 +32,7 @@ void app_main(void) {
     ESP_ERROR_CHECK(ret);
 
     EventGroupHandle_t connect_evt_group = xEventGroupCreate();
-    QueueHandle_t queue = xQueueCreate(2, sizeof(struct Weather));
+    QueueHandle_t queue = xQueueCreate(10, sizeof(struct Weather));
     if (queue == 0) {
         ESP_LOGE(TAG, "Error creating queue");
         return;

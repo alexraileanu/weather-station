@@ -6,5 +6,6 @@
 #include "esp_log.h"
 #include "string.h"
 #include "weather.h"
+#include "http.h"
 
 void sensor_collect_data(void *pvParameters);
