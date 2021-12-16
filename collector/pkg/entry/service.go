@@ -8,12 +8,14 @@ import (
 
 type Service interface {
     SaveEntry(*model.Entry, bool) (*model.Entry, error)
+    SaveLog(*model.Log) (*model.Log, error)
 
     SendBatteryMail(float64) error
 }
 
 type EntryDB interface {
     SaveEntry(*gorm.DB, *model.Entry) (*model.Entry, error)
+    SaveLog(*gorm.DB, *model.Log) (*model.Log, error)
 }
 
 type Mail interface {

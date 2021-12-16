@@ -15,3 +15,11 @@ func (e EDB) SaveEntry(db *gorm.DB, entry *model.Entry) (*model.Entry, error) {
 
     return entry, qb.Error
 }
+
+func (e EDB) SaveLog(db *gorm.DB, log *model.Log) (*model.Log, error) {
+    qb := db.Table("logs")
+
+    qb.Save(log)
+
+    return log, qb.Error
+}

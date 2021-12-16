@@ -70,18 +70,6 @@ func (s *SRV) setup() {
         eng.Use(mw)
     }
 
-    // custom logger so that we don't print unnecessary error messages
-    eng.Use(gin.LoggerWithFormatter(func(param gin.LogFormatterParams) string {
-        return fmt.Sprintf("[GIN] %v |%s %3d %s| %13v | %15s |%s %-7s %s %#v\n",
-            param.TimeStamp.Format("2006/01/02 - 15:04:05"),
-            param.StatusCodeColor(), param.StatusCode, param.ResetColor(),
-            param.Latency,
-            param.ClientIP,
-            param.MethodColor(), param.Method, param.ResetColor(),
-            param.Path,
-        )
-    }))
-
     entry.NewHTTP(entry.Initialize(s.db, mail.New()), eng.Group("entry"))
 
     s.Eng = eng

@@ -1,11 +1,10 @@
 package entry
 
 import (
+    "github.com/alexraileanu/weather-station/pkg/common/model"
     "github.com/alexraileanu/weather-station/utl/math"
     "github.com/gin-gonic/gin"
     "net/http"
-
-    "github.com/alexraileanu/weather-station/pkg/common/model"
 )
 
 type HTTP struct {
@@ -20,10 +19,15 @@ type insert struct {
     Battery  float64 `json:"battery" binding:"required"`
 }
 
+type log struct {
+    Msg string `json:"msg"`
+}
+
 func NewHTTP(svc Service, c *gin.RouterGroup) {
     h := HTTP{svc}
 
     c.POST("/entries", h.createEntry)
+    c.POST("/log", h.printLog)
 }
 
 func (h HTTP) createEntry(c *gin.Context) {
@@ -52,4 +56,19 @@ func (h HTTP) createEntry(c *gin.Context) {
     return
 }
 
+func (h HTTP) printLog(c *gin.Context) {
+    r := new(log)
+    if err := c.ShouldBindJSON(r); err != nil {
+        c.Abort()
+        return
+    }
 
+    //timestamp := time.Now().Format("2006-01-02 15:04:05")
+    //fmt.Printf("[%s] - Got message from collector: %s\n", timestamp, r.Msg)
+    log := &model.Log{
+        Message: r.Msg,
+    }
+    h.svc.SaveLog(log)
+    c.JSON(http.StatusOK, gin.H{})
+    return
+}

@@ -9,4 +9,5 @@ func RunMigrations(usr, pass, host, name string) {
 
     m.AddMigrationsTable()
     m.AddEntriesTable()
+    m.AddLogsTable()
 }
